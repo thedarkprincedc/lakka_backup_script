@@ -8,8 +8,6 @@ Please supply and ip address in the following format\n\n\
         exit 1
 fi
 
-echo -e "\n\nConnected to Lakka Client at $1"
-
 HOST=$1
 CURRENT_DATE=$(date +'%Y-%m-%d')
 OUT_FILE="lakka_backup_"$CURRENT_DATE".zip"
@@ -19,6 +17,7 @@ rm -rf ./tmp
 
 # Backup Playlist and Mount Scripts
 if ssh root@$HOST /bin/bash <<EOF
+    echo "Connected to Lakka Client at $1"
     rm -rf /tmp/lakka_backup
     mkdir -p /tmp/lakka_backup
     mkdir -p /tmp/lakka_backup/mount-scripts
