@@ -32,7 +32,8 @@ EOF
 
 echo -e "Backing up playlists and mount-scripts.....\n"
 scp root@$HOST:/tmp/lakka_backup/$OUT_FILE ./
+exit 1
 echo -e "Backed up playlists and mount-scripts.....\n"
 echo -e "Backing up thumbnails...."
-sftp -r root@$HOST:/storage/thumbnails ./thumbnails
+sftp -r root@$HOST:/storage/thumbnails ./
 echo -e "Backed up thumbnails...."
