@@ -18,8 +18,7 @@ rm -rf "./"$OUT_FILE
 rm -rf ./tmp
 
 # Backup Playlist and Mount Scripts
-echo -e "Preparing playlists and mount-scripts.....\n"
-ssh root@$HOST /bin/bash <<EOF
+if ssh root@$HOST /bin/bash <<EOF
     rm -rf /tmp/lakka_backup
     mkdir -p /tmp/lakka_backup
     mkdir -p /tmp/lakka_backup/mount-scripts
@@ -28,12 +27,24 @@ ssh root@$HOST /bin/bash <<EOF
     cp -rp /storage/.config/system.d/storage-roms-* /tmp/lakka_backup/mount-scripts
     zip /tmp/lakka_backup/$OUT_FILE /tmp/lakka_backup/mount-scripts/* /tmp/lakka_backup/playlists/*
 EOF
+then
+    echo "Successfully copied playlists and mount-scripts"
+else
+    echo "Failed to copy playlists and mount-scripts"
+fi
 
+# downloading backup file
+if scp root@$HOST:/tmp/lakka_backup/$OUT_FILE ./
+then
+    echo "Successfully dowloaded" $OUT_FILE
+else
+    echo "Failed to download" $OUT_FILE
+fi
 
-echo -e "Backing up playlists and mount-scripts.....\n"
-scp root@$HOST:/tmp/lakka_backup/$OUT_FILE ./
-exit 1
-echo -e "Backed up playlists and mount-scripts.....\n"
-echo -e "Backing up thumbnails...."
-sftp -r root@$HOST:/storage/thumbnails ./
-echo -e "Backed up thumbnails...."
+#downloading thumbnails
+if sftp -r root@$HOST:/storage/thumbnails ./
+then 
+    echo "Successfully downloaded thumbnails"
+else
+    echo "Failed to download thumbnails"
+fi
